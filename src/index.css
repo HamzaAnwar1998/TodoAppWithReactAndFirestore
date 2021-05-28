@@ -1,9 +1,9 @@
 *{
     margin: 0;
-    border: 0;
+    padding: 0;
 }
 
-.wrapper{
+div.wrapper{
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -13,10 +13,10 @@
     width: 100%;
     height: auto;
     padding: 50px;
-    background-color: #0170AD;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    background-color: #0170AD;
 }
 
 @media(max-width: 768px){
@@ -80,14 +80,19 @@
     }
 }
 
-.header-box .rightside .mybtn{
+.header-box .rightside .btn, .header-box .rightside .btn:hover{
     width: 100px;
     margin-bottom: 5px;
-}
-
-.header-box .rightside .btn-link, .header-box .rightside .btn-link:hover{
     color: #fff;
     text-decoration: none;
+}
+
+.date-section{
+    color: #fff;
+}
+
+.date-section span{
+    margin: 4px;
 }
 
 /* signup */
@@ -107,14 +112,6 @@
 .welcome-div{
     color: #fff;
     letter-spacing: 0.09em;
-}
-
-.date-section{
-    color: #fff;
-}
-
-.date-section span{
-    margin: 4px;
 }
 
 /* todo */
@@ -142,8 +139,7 @@
 
 .delete-btn{
     color: rgb(165, 2, 2);
-    cursor: pointer;
-    
+    cursor: pointer;    
 }
 
 .modal-container{
@@ -194,6 +190,3 @@
     color: rgb(165, 2, 2);
     cursor: pointer;
 }
-
-
-

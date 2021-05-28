@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { Home } from './Components/Home'
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
-import { Signup } from './Components/Signup'
+import { Home } from './Components/Home'
 import { Login } from './Components/Login'
-import {NotFound} from './Components/NotFound'
+import { NotFound } from './Components/NotFound'
+import { Signup } from './Components/Signup'
 import {auth, db} from './Config/Config'
 
 export class App extends Component {
@@ -11,7 +11,7 @@ export class App extends Component {
   state={
     currentUser: null,
     todos:[],
-    todo: null
+    editTodoValue: null
   }
 
   componentDidMount(){
@@ -25,10 +25,11 @@ export class App extends Component {
         })
       }
       else{
-        console.log('user is not signed in for getting current user');
-      }      
+        console.log('user is not signed in to retrive username')
+      }
     })
-    // getting todo items for current user
+
+    // getting todos for current user
     auth.onAuthStateChanged(user=>{
       if(user){
         const todoList = this.state.todos;
@@ -41,18 +42,17 @@ export class App extends Component {
                 Todo: change.doc.data().Todo
               })
             }
-            else if(change.type==='removed'){
+            if(change.type==='removed'){
+              // console.log(change.type);
               for(var i = 0; i<todoList.length; i++){
-                if(todoList[i].id===change.doc.id){
+                if(todoList[i].id === change.doc.id){
                   todoList.splice(i,1);
                 }
               }
             }
-
             this.setState({
               todos: todoList
             })
-            // console.log(this.state.todos);
           })
         })
       }
@@ -60,61 +60,58 @@ export class App extends Component {
         console.log('user is not signed in to retrive todos');
       }
     })
+    
   }
 
   deleteTodo=(id)=>{
+    // console.log(id);
     auth.onAuthStateChanged(user=>{
       if(user){
         db.collection('todos of ' + user.uid).doc(id).delete();
       }
       else{
-        console.log('user is not signed in to delete data');
+        console.log('user is not signed in to delete todos');
       }
     })
   }
 
-  editModal=(todo)=>{
-    // console.log(todo.id);
+  editModal=(obj)=>{
     this.setState({
-      todo: todo
+      editTodoValue: obj
     })
   }
 
-  updateTodoHandler=(todo, id)=>{
-    // console.log(id, todo);
-    const todoList=this.state.todos;
-    for(var i=0; i<todoList.length; i++){
+  updateTodoHandler=(editTodo, id)=>{
+    // console.log(editTodo, id);
+    const todoList = this.state.todos;
+    for(var i = 0; i<todoList.length; i++){
       if(todoList[i].id===id){
-        // console.log('id matched');
-        todoList.splice(i,1,{id,Todo: todo});
-        
+        todoList.splice(i,1,{id,Todo: editTodo});
       }
       this.setState({
         todos: todoList
       })
-      
     }
-    
   }
 
   render() {
+    // console.log(this.state.todos);
     return (
       <Router>
         <Switch>
-          <Route exact path="/" component={()=><Home
+          <Route exact path='/' component={()=><Home
             currentUser={this.state.currentUser}
             todos={this.state.todos}
             deleteTodo={this.deleteTodo}
+            editTodoValue={this.state.editTodoValue}
             editModal={this.editModal}
-            todo={this.state.todo}
             updateTodoHandler={this.updateTodoHandler}
           />}/>
           <Route path="/signup" component={Signup}/>
           <Route path="/login" component={Login}/>
-
-          <Route path="" component={NotFound}/>
+          <Route component={NotFound}/>           
         </Switch>
-      </Router>      
+      </Router>
     )
   }
 }

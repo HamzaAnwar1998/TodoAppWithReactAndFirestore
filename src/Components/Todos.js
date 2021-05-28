@@ -1,11 +1,10 @@
 import React from 'react'
 import { IndividualTodo } from './IndividualTodo'
 
-export const Todos = ({todos, deleteTodo
-,editModal}) => {
-    // console.log(todos);
-    return todos.map(todo=>(
-        <IndividualTodo todo={todo} key={todo.id} deleteTodo={deleteTodo}
+export const Todos = ({todos, deleteTodo, editModal}) => {
+    return todos.map((individualTodo)=>(
+        <IndividualTodo individualTodo={individualTodo} 
+        key={individualTodo.id} deleteTodo={deleteTodo}
             editModal={editModal}
         />
     ))

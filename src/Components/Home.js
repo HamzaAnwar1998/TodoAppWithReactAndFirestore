@@ -1,14 +1,13 @@
 import React,{useState} from 'react'
-import { Header } from './Header'
+import {Header} from './Header'
 import {auth, db} from '../Config/Config'
 import { Todos } from './Todos';
 import { Modal } from './Modal';
 
 export const Home = ({currentUser, todos, deleteTodo,
-editModal, todo, updateTodoHandler}) => {
+editTodoValue, editModal, updateTodoHandler}) => {
 
-  const [addTodo, setAddTodo]=useState('');
-
+  const [todo, setTodo]=useState('');
   const [todoError, setTodoError]=useState('');
 
   const handleTodoSubmit=(e)=>{
@@ -16,17 +15,16 @@ editModal, todo, updateTodoHandler}) => {
     auth.onAuthStateChanged(user=>{
       if(user){
         db.collection('todos of ' + user.uid).add({
-          Todo: addTodo
-        }).then(setAddTodo('')).catch(err=>setTodoError(err.message))
+          Todo: todo
+        }).then(setTodo('')).catch(err=>setTodoError(err.message))
       }
       else{
-        console.log('no user is signed in');
+        console.log('user is not signed in to add todo to database');
       }
     })
   }
 
     return (
-      <>
         <div className='wrapper'>
           <Header currentUser={currentUser}/>
           <br></br>
@@ -34,10 +32,12 @@ editModal, todo, updateTodoHandler}) => {
           <div className='container'>
             <form autoComplete='off' className='form-group'
             onSubmit={handleTodoSubmit}>
+
             {currentUser&&<>
               <input type="text" placeholder="Enter TODO's"
                 className='form-control' required
-                onChange={(e)=>setAddTodo(e.target.value)} value={addTodo}
+                onChange={(e)=>setTodo(e.target.value)}
+                value={todo}
               />
               <br></br>
               <div style={{width: 100+'%',
@@ -47,8 +47,9 @@ editModal, todo, updateTodoHandler}) => {
                    ADD
                 </button>
               </div>
-              {todoError&&<div className='error-msg'>{todoError}</div>}
+              
             </>}
+
             {!currentUser&&<>
               <input type="text" placeholder="Enter TODO's"
                 className='form-control' required disabled
@@ -67,18 +68,15 @@ editModal, todo, updateTodoHandler}) => {
             </>}
             
             </form>
-
+            {todoError&&<div className='error-msg'>{todoError}</div>}
             <Todos todos={todos} deleteTodo={deleteTodo}
-              editModal={editModal}
-            />
-            <br></br>
-            <br></br>
-          </div>  
-        </div>
-        {todo&&<Modal todo={todo} editModal={editModal}
-        updateTodoHandler={updateTodoHandler}
-        />}
-        </>
+             editModal={editModal}/>
+            </div>
 
+            {editTodoValue&&<Modal editTodoValue={editTodoValue}
+              editModal={editModal} updateTodoHandler={updateTodoHandler}
+            />} 
+              
+        </div>
     )
 }

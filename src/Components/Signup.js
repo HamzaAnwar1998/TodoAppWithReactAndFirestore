@@ -4,7 +4,7 @@ import {auth, db} from '../Config/Config'
 
 export const Signup = (props) => {
 
-    const [name, setName]=useState('');
+    const [fullName, setFullName]=useState('');
     const [email, setEmail]=useState('');
     const [password, setPassword]=useState('');
 
@@ -12,17 +12,17 @@ export const Signup = (props) => {
 
     const handleRegister=(e)=>{
         e.preventDefault();
-        auth.createUserWithEmailAndPassword(email,password).then((cred)=>{
+        auth.createUserWithEmailAndPassword(email, password).then((cred)=>{
             db.collection('users').doc(cred.user.uid).set({
-                Name: name,
+                Name: fullName,
                 Email: email,
                 Password: password
             }).then(()=>{
-                setName('');
+                setFullName('');
                 setEmail('');
                 setPassword('');
                 setRegisterationError('');
-                props.history.push('/login')
+                props.history.push('/login');
             }).catch(err=>setRegisterationError(err.message))
         }).catch(err=>setRegisterationError(err.message))
     }
@@ -33,11 +33,12 @@ export const Signup = (props) => {
             <br></br>
             <h2>REGISTER HERE</h2>
             <br></br>
-            <form autoComplete="off" className='form-group' onSubmit={handleRegister}>
+            <form autoComplete="off" className='form-group'
+            onSubmit={handleRegister}>
                 <label>Enter Full Name</label>
                 <input type="text" className='form-control'
-                    required onChange={(e)=>setName(e.target.value)}
-                    value={name}
+                    required onChange={(e)=>setFullName(e.target.value)}
+                    value={fullName}
                 />
                 <br></br>
                 <label>Enter Email</label>
@@ -59,6 +60,7 @@ export const Signup = (props) => {
             {registerationError&&<div className='error-msg'>
                 {registerationError}
             </div>}
+           
             <span>Already have an account? Login
             <Link to="login"> here</Link></span>
         </div>

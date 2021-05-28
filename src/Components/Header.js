@@ -1,17 +1,13 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState,useEffect} from 'react'
+import todoLogo from '../images/todo-list.png'
 import {Link} from 'react-router-dom'
-import { auth } from '../Config/Config';
-import todoList from '../Images/todo-list.png'
-// import { useHistory } from 'react-router-dom'
+import {auth} from '../Config/Config'
 
 export const Header = ({currentUser}) => {
-
-    // const {history}=useHistory();
 
     const [date, setDate]=useState(null);
     const [month, setMonth]=useState(null);
     const [year, setYear]=useState(null);
-
     const [day, setDay]=useState(null);
 
     useEffect(()=>{
@@ -32,28 +28,31 @@ export const Header = ({currentUser}) => {
             window.location.reload();
         });
     }
-
+   
     return (
         <div className='header-box'>
             <div className='leftside'>
-               <div className='img'>
-                  <img src={todoList} alt="todoimage"/>
-               </div>
-               <div className='content'>
-                   <div className='heading-big'>Lots of work to do?</div>
-                   <div className='heading-small'>
-                       Lets make a list
-                   </div>
-               </div>
+                <div className='img'>
+                  <img src={todoLogo} alt="todologo"/>
+                </div>
+                <div className='content'>
+                    <div className='heading-big'>
+                    Lots of work to do?
+                    </div>
+                    <div className='heading-small'>
+                    Lets make a list
+                    </div>
+                </div>
             </div>
             <div className='rightside'>
-                {!currentUser&&<>
-                    <Link className='btn btn-primary mybtn btn-link' to="signup">
+                
+            {!currentUser&&<>
+                    <Link className='btn btn-primary btn-md' to="signup">
                      SIGN UP
-                  </Link>
+                    </Link>
                
                
-                  <Link className='btn btn-secondary mybtn btn-link' to="login">
+                  <Link className='btn btn-secondary btn-md' to="login">
                      LOGIN
                   </Link>
 
@@ -67,6 +66,7 @@ export const Header = ({currentUser}) => {
                  
                 </>}
                 {currentUser&&<div className='welcome-div'>
+
                     <h2>WELCOME</h2>
                     <h5>{currentUser}</h5>
                     <br></br>
@@ -79,7 +79,8 @@ export const Header = ({currentUser}) => {
                     <br></br>
                     <button className='btn btn-danger'
                     onClick={handleLogout}>LOGOUT</button>
-                </div>}
+                </div>} 
+              
              </div>
         </div>
     )

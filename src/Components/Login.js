@@ -11,7 +11,7 @@ export const Login = (props) => {
 
     const handleLogin=(e)=>{
         e.preventDefault();
-        auth.signInWithEmailAndPassword(email,password).then(()=>{
+        auth.signInWithEmailAndPassword(email, password).then(()=>{
             setEmail('');
             setPassword('');
             setLoginError('');
@@ -25,7 +25,8 @@ export const Login = (props) => {
             <br></br>
             <h2>LOGIN HERE</h2>
             <br></br>
-            <form autoComplete="off" className='form-group' onSubmit={handleLogin}>
+            <form autoComplete="off" className='form-group'
+            onSubmit={handleLogin}>
                 
                 <label>Enter Email</label>
                 <input type="email" className='form-control'
@@ -46,6 +47,7 @@ export const Login = (props) => {
             {loginError&&<div className='error-msg'>
                 {loginError}
             </div>}
+            
             <span>Don't have an account? Create One
             <Link to="signup"> here</Link></span>
         </div>
